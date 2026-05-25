@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WelderOne – Soldadura Profesional</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --fire: #FF4B00;
+      --ember: #FF8C00;
+      --steel: #1a1a1a;
+      --iron: #2e2e2e;
+      --smoke: #888;
+      --light: #f5f0eb;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--steel);
+      color: var(--light);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 5%;
+      background: rgba(26,26,26,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(255,75,0,0.2);
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+
+    .logo span { color: var(--fire); }
+
+    nav a {
+      color: var(--smoke);
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.3s;
+    }
+
+    nav a:hover { color: var(--fire); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 5%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 80% 50%, rgba(255,75,0,0.15) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,140,0,0.08) 0%, transparent 60%);
+    }
+
+    /* Sparks */
+    .sparks {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .spark {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--fire);
+      animation: spark-fly var(--d, 3s) ease-out infinite;
+      animation-delay: var(--delay, 0s);
+      left: var(--x, 50%);
+      top: var(--y, 50%);
+      opacity: 0;
+    }
+
+    @keyframes spark-fly {
+      0%   { transform: translate(0,0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--tx,20px), var(--ty,-60px)) scale(0); opacity: 0; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--fire);
+      border: 1px solid rgba(255,75,0,0.4);
+      padding: 0.4rem 1rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      color: var(--white);
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--fire);
+    }
+
+    .hero-sub {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--smoke);
+      max-width: 420px;
+      line-height: 1.7;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .hero-cta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.6s ease both;
+    }
+
+    .btn-primary {
+      background: var(--fire);
+      color: var(--white);
+      padding: 0.9rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--ember);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--light);
+      padding: 0.9rem 2rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid rgba(245,240,235,0.3);
+      cursor: pointer;
+      transition: border-color 0.3s, color 0.3s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--fire);
+      color: var(--fire);
+    }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--fire), transparent);
+      opacity: 0.3;
+    }
+
+    /* SERVICIOS */
+    #servicios {
+      padding: 6rem 5%;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--fire);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--white);
+      margin-bottom: 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      background: rgba(255,75,0,0.15);
+    }
+
+    .service-card {
+      background: var(--iron);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--fire);
+      transition: width 0.4s ease;
+    }
+
+    .service-card:hover { background: #333; }
+    .service-card:hover::before { width: 100%; }
+
+    .service-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem;
+      letter-spacing: 1px;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+
+    .service-card p {
+      font-size: 0.9rem;
+      color: var(--smoke);
+      line-height: 1.7;
+    }
+
+    /* POR QUE YO */
+    #porque {
+      padding: 6rem 5%;
+      background: var(--iron);
+    }
+
+    .porque-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .porque-text h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+
+    .porque-text h2 span { color: var(--fire); }
+
+    .porque-text p {
+      color: var(--smoke);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat {
+      border-left: 2px solid var(--fire);
+      padding-left: 1rem;
+    }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      color: var(--fire);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--smoke);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* CONTACTO */
+    #contacto {
+      padding: 6rem 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #contacto::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(255,75,0,0.08) 0%, transparent 70%);
+    }
+
+    #contacto .section-label { text-align: center; }
+
+    #contacto h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      color: var(--white);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    #contacto p {
+      color: var(--smoke);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #25D366;
+      color: var(--white);
+      padding: 1rem 2.5rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .contact-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(37,211,102,0.3);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem 5%;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer .logo { font-size: 1.2rem; }
+
+    footer p {
+      font-size: 0.8rem;
+      color: var(--smoke);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      nav ul { display: none; }
+      .porque-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Welder<span>One</span></div>
+    <ul>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#porque">Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+
+    <!-- Sparks decorativas -->
+    <div class="sparks" id="sparks"></div>
+
+    <div class="hero-content">
+      <div class="hero-tag">⚡ Soldadura Profesional</div>
+      <h1>TODO TIPO<br>DE <em>SOLDA-<br>DURA</em></h1>
+      <p class="hero-sub">Trabajo de calidad, hecho con experiencia y dedicación. Rejas, portones, estructuras, reparaciones — si es metal, lo soldamos.</p>
+      <div class="hero-cta">
+        <a href="#contacto" class="btn-primary">Pedir servicio</a>
+        <a href="#servicios" class="btn-outline">Ver servicios</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <p class="section-label reveal">Lo que hacemos</p>
+    <h2 class="section-title reveal">Servicios</h2>
+
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-icon">⚡</div>
+        <h3>Soldadura Eléctrica</h3>
+        <p>Uniones resistentes para estructuras de todo tipo. Trabajos en acero negro, inoxidable y más.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🔥</div>
+        <h3>Soldadura MIG / TIG</h3>
+        <p>Para trabajos que requieren precisión y terminación limpia. Ideal para piezas delicadas o visibles.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🚪</div>
+        <h3>Rejas y Portones</h3>
+        <p>Fabricación e instalación de rejas, portones corredizos y batientes, barandas y cercos.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🏗️</div>
+        <h3>Estructuras Metálicas</h3>
+        <p>Techos, galpones, escaleras y estructuras a medida para uso residencial e industrial.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🔧</div>
+        <h3>Reparaciones</h3>
+        <p>Reparación de piezas rotas, grietas, cortes y cualquier trabajo de mantenimiento en metal.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">📐</div>
+        <h3>Trabajo a Medida</h3>
+        <p>¿Tenés una idea o plano? Lo fabricamos. Escuchamos cada proyecto y lo hacemos realidad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CON QUÉ SOLDAMOS -->
+  <section id="metodos" style="padding: 5rem 5%; background: #222;">
+    <p class="section-label reveal">Nuestros métodos</p>
+    <h2 class="section-title reveal">Con qué <span style="color:var(--fire)">soldamos</span></h2>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
+      <div class="service-card reveal">
+        <div class="service-icon">🔵</div>
+        <h3>MIG</h3>
+        <p>Soldadura por hilo continuo con gas protector. Rápida, limpia y versátil para acero y aluminio.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🟡</div>
+        <h3>TIG</h3>
+        <p>Alta precisión con electrodo de tungsteno. Ideal para trabajos finos, acero inoxidable y terminaciones prolijas.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">⚡</div>
+        <h3>Eléctrica</h3>
+        <p>Soldadura por electrodo revestido. Resistente y confiable para estructuras, reparaciones y trabajos pesados.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">🔥</div>
+        <h3>Con Gas</h3>
+        <p>Soldadura oxiacetilénica. Perfecta para cortes, doblados y uniones en metales delgados.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- POR QUÉ YO -->
+  <section id="porque">
+    <div class="porque-grid">
+      <div class="porque-text reveal">
+        <p class="section-label">Por qué elegirnos</p>
+        <h2>TRABAJO <span>SERIO</span>,<br>TRATO <span>DIRECTO</span></h2>
+        <p>Soy un soldador independiente. Eso significa que cuando me contratás, el trabajo lo hago yo — sin intermediarios, sin excusas. Me hago cargo de cada proyecto de principio a fin.</p>
+        <p>Atiendo personalmente, doy presupuesto claro y cumplo con los tiempos acordados.</p>
+      </div>
+      <div class="stats reveal">
+        <div class="stat">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Dedicación personal</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">Todo</div>
+          <div class="stat-label">Tipo de soldadura</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">Sin</div>
+          <div class="stat-label">Intermediarios</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Sorpresas en el precio</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <p class="section-label">Hablemos</p>
+    <h2 class="reveal">¿TENÉS UN<br>PROYECTO?</h2>
+    <p class="reveal">Escribime por WhatsApp y te doy presupuesto sin costo.</p>
+    <a href="https://wa.me/393513119539?text=Hola!%20Vi%20tu%20página%20y%20quiero%20un%20presupuesto." class="contact-btn reveal" target="_blank">
+      <!-- WhatsApp icon -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Escribime por WhatsApp
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo">Welder<span>One</span></div>
+    <p>© 2026 WelderOne · Soldadura Profesional</p>
+  </footer>
+
+  <script>
+    // Sparks animation
+    const container = document.getElementById('sparks');
+    for (let i = 0; i < 18; i++) {
+      const s = document.createElement('div');
+      s.className = 'spark';
+      s.style.setProperty('--x', Math.random() * 80 + 10 + '%');
+      s.style.setProperty('--y', Math.random() * 80 + 10 + '%');
+      s.style.setProperty('--d', (2 + Math.random() * 3) + 's');
+      s.style.setProperty('--delay', (Math.random() * 4) + 's');
+      s.style.setProperty('--tx', (Math.random() * 60 - 30) + 'px');
+      s.style.setProperty('--ty', -(30 + Math.random() * 60) + 'px');
+      container.appendChild(s);
+    }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+</body>
+</html>
